@@ -1,0 +1,53 @@
+Created by PLY version 3.8 (http://www.dabeaz.com/ply)
+
+Grammar
+
+Rule 0     S' -> exp
+Rule 1     exp -> atom
+Rule 2     exp -> quoted_list
+Rule 3     exp -> call
+Rule 4     quoted_list -> QUOTE list
+Rule 5     list -> LPAREN items RPAREN
+Rule 6     items -> item items
+Rule 7     items -> empty
+Rule 8     empty -> <empty>
+Rule 9     item -> atom
+Rule 10    item -> quoted_list
+Rule 11    item -> call
+Rule 12    item -> empty
+Rule 13    call -> LPAREN SIMB items PAREN
+Rule 14    atom -> SIMB
+Rule 15    atom -> bool
+Rule 16    atom -> NUM
+Rule 17    atom -> TEXT
+Rule 18    atom -> <empty>
+Rule 19    bool -> TRUE
+Rule 20    bool -> FALSE
+Rule 21    atom -> NIL
+
+Terminals, with rules where they appear
+
+FALSE                : 20
+LPAREN               : 5 13
+NIL                  : 21
+NUM                  : 16
+QUOTE                : 4
+RPAREN               : 5
+SIMB                 : 13 14
+TEXT                 : 17
+TRUE                 : 19
+error                : 
+
+Nonterminals, with rules where they appear
+
+PAREN                : 13
+atom                 : 1 9
+bool                 : 15
+call                 : 3 11
+empty                : 7 12
+exp                  : 0
+item                 : 6
+items                : 5 6 13
+list                 : 4
+quoted_list          : 2 10
+
