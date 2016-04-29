@@ -62,10 +62,19 @@ def add(l):
 name['+'] = add
 
 def minus(l):
-    '''Unary minus'''
-    return -l[0]
+    if l[1]:
+        #binary minus
+        return l[0] - l[1]
+    else:
+        #unary minus
+        return -l[0]
 
 name['-'] = minus
+
+def multiply(l):
+    return l[0]*l[1]
+
+name['*'] = multiply
 
 def _print(l):
     print lisp_str(l[0])
@@ -174,6 +183,33 @@ def p_item_call(p):
 def p_item_empty(p):
     'item : empty'
     p[0] = p[1]
+
+def p_let_only(p):
+    'call : LPAREN LET LPAREN VARI NUM RPAREN RPAREN'
+    name[p[4]] = p[5]
+    del name[p[4]]
+    p[0] = str(p[4]) + " <- " +  str(p[5])
+
+def p_let_varileft(p):
+    'call : LPAREN LET LPAREN VARI NUM RPAREN LPAREN SIMB VARI NUM RPAREN RPAREN'
+    if p[4] == p[9]:
+        name[p[4]] = p[5]
+        varnum = name[p[9]]
+        del name[p[4]]
+        p[0] = lisp_eval(p[8], [varnum, p[10]])
+
+    else:
+        p[0] = "Error, ensure 'let' variable matches expression variable"
+def p_let_variright(p):
+    'call : LPAREN LET LPAREN VARI NUM RPAREN LPAREN SIMB NUM VARI RPAREN RPAREN'
+    if p[4] == p[10]:
+        name[p[4]] = p[5]
+        varnum = name[p[10]]
+        del name[p[4]]
+        p[0] = lisp_eval(p[8], [varnum, p[9]])
+
+    else:
+        p[0] = "Error, ensure 'let' variable mathces expression variable"
 
 def p_call(p):
     'call : LPAREN SIMB items RPAREN'
