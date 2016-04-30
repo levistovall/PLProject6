@@ -8,7 +8,7 @@ import ply.lex as lex
 
 # List of token names.   
 tokens = ('QUOTE', 'SIMB', 'NUM', 'LPAREN', 'RPAREN', \
-'NIL', 'TRUE', 'FALSE', 'TEXT', 'LET', 'VARI')
+'NIL', 'TRUE', 'FALSE', 'TEXT', 'LET', 'VARI', 'IF')
 
 # Reserved words
 reserved = {
@@ -33,6 +33,11 @@ def t_NUM(t):
     except ValueError:
         print "Line %d: Number %s is too large!" % (t.lineno,t.value)
         t.value = 0
+    return t
+
+def t_IF(t):
+    r'if'
+    t.type = reserved.get(t.value, 'IF')
     return t
 
 def t_VARI(t):

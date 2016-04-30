@@ -53,6 +53,8 @@ name['or'] = _or
 def cond(l):
     if l[0]:
         return l[1]
+    else:
+        return l[2]
 
 name['cond'] = cond
 
@@ -86,6 +88,12 @@ name['print'] = _print
 def lisp_eval(simb, items):
     if simb in name:
         return call(name[simb], eval_lists(items))
+    elif(simb == "if"):
+        items_length = len(eval_lists(items))
+        if(items_length == 3):
+            return call(cond, eval_lists(items))
+        else:
+            return "Error: function if expected 3 arguments, found " + str(items_length)
     else:
        return [simb] + items
 
@@ -184,6 +192,11 @@ def p_item_empty(p):
     'item : empty'
     p[0] = p[1]
 
+def p_conditional(p):
+    'call : LPAREN IF items RPAREN'
+    if DEBUG: print "Calling", p[2], "with", p[3]
+    p[0] = lisp_eval(p[2], p[3])
+
 def p_let_only(p):
     'call : LPAREN LET LPAREN VARI NUM RPAREN RPAREN'
     name[p[4]] = p[5]
@@ -214,7 +227,9 @@ def p_let_variright(p):
 def p_call(p):
     'call : LPAREN SIMB items RPAREN'
     if DEBUG: print "Calling", p[2], "with", p[3] 
-    p[0] = lisp_eval(p[2], p[3])   
+    p[0] = lisp_eval(p[2], p[3])
+
+
 
 def p_atom_simbol(p):
     'atom : SIMB'
